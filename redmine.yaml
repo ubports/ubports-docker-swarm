@@ -1,0 +1,39 @@
+version: "3"
+services:
+  redmine:
+    image: redmine
+    networks:
+      - webgateway
+      - db-net
+    volumes:
+      - redmine-volume:/usr/src/redmine/files
+    deploy:  
+      labels:
+        - "traefik.docker.network: webgateway"
+        - "traefik.frontend.rule=Host:redmine2.ubports.com"
+        - "traefik.port=3000"
+    environment:
+      REDMINE_DB_MYSQL: db     
+      REDMINE_DB_PASSWORD: pass   
+  db:
+    image: mariadb
+    networks:
+      - db-net
+    deploy:
+       replicas: 1
+    volumes:
+       - db-volume:/var/lib/mysql
+    environment:  
+      MYSQL_ROOT_PASSWORD: pass   
+      MYSQL_DATABASE: redmine
+
+networks:  
+  db-net:
+  webgateway:    
+    driver: overlay
+    external: true 
+
+volumes:    
+  db-volume:
+  redmine-volume:
+

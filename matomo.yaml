@@ -1,0 +1,35 @@
+version: "3"
+services:
+  matomo:
+    image: matomo
+    networks:
+      - webgateway
+      - db-net
+    volumes:
+      - conf-volume:/var/www/html/config
+    deploy:  
+      labels:
+        traefik.docker.network: traefik
+        traefik.frontend.rule: Host:analytics2.ubports.com
+        traefik.port: 9000
+  db:
+    image: mariadb
+    networks:
+      - db-net
+    deploy:
+       replicas: 1
+    volumes:
+       - db-volume:/var/lib/mysql
+    environment:  
+      MYSQL_ROOT_PASSWORD: pass   
+      MYSQL_DATABASE: matomo
+
+networks:  
+  db-net:
+  webgateway:    
+    driver: overlay
+    external: true 
+
+volumes:    
+  db-volume:
+  conf-volume:

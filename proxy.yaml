@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik # The official Traefik docker image
+    command: --api --docker --docker.watch --debug=true --docker.swarmmode=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - webgateway
+    ports:
+      - 80:80
+      - 443:443
+      - 889:8080
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+       
+networks:
+  webgateway:
+    driver: overlay
+    external: true

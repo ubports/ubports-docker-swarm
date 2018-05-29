@@ -1,0 +1,21 @@
+version: "3"
+services:
+  autoscaler:
+    image: gianarb/orbiter
+    command: daemon
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 891:8000
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+
