@@ -16,7 +16,7 @@ services:
         - "traefik.port=3000"
     environment:
       REDMINE_DB_MYSQL: db     
-      REDMINE_DB_PASSWORD: /run/secrets/redmine_db_password
+      REDMINE_DB_PASSWORD_FILE: /run/secrets/redmine_db_password
   db:
     image: mariadb
     secrets:
@@ -28,7 +28,7 @@ services:
     volumes:
        - db-volume:/var/lib/mysql
     environment:  
-      MYSQL_ROOT_PASSWORD: /run/secrets/redmine_db_password   
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/redmine_db_password
       MYSQL_DATABASE: redmine
 
 networks:  
