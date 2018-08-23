@@ -1,10 +1,12 @@
-version: "3"
+version: "3.4"
 services:
   redmine:
     image: redmine
     networks:
       - webgateway
       - db-net
+    secrets:
+      - redmine_db_password 
     volumes:
       - redmine-volume:/usr/src/redmine/files
     deploy:  
@@ -14,9 +16,11 @@ services:
         - "traefik.port=3000"
     environment:
       REDMINE_DB_MYSQL: db     
-      REDMINE_DB_PASSWORD: pass   
+      REDMINE_DB_PASSWORD: /run/secrets/redmine_db_password
   db:
     image: mariadb
+    secrets:
+      - redmine_db_password
     networks:
       - db-net
     deploy:
@@ -24,7 +28,7 @@ services:
     volumes:
        - db-volume:/var/lib/mysql
     environment:  
-      MYSQL_ROOT_PASSWORD: pass   
+      MYSQL_ROOT_PASSWORD: /run/secrets/redmine_db_password   
       MYSQL_DATABASE: redmine
 
 networks:  
@@ -37,3 +41,6 @@ volumes:
   db-volume:
   redmine-volume:
 
+secrets:
+   redmine_db_password:
+     external: true

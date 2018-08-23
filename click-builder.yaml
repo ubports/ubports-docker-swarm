@@ -1,0 +1,20 @@
+version: "3"
+services:
+  devices-page:
+    image: ubports/click-builder
+    networks:
+      - webgateway
+    deploy:
+      labels:
+        - "traefik.docker.network: webgateway"
+        - "traefik.frontend.rule=Host:click.ubports.com"
+        - "traefik.port=3000"
+    environment:
+      KEY: ""
+      APIKEY: ""
+      URL: "http://click.ubports.com"
+      SECRET: ""
+networks:
+  webgateway:
+    driver: overlay
+    external: true
