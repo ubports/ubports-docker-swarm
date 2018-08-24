@@ -1,17 +1,32 @@
-version: '3'
+version: '3.4'
 
 services:
   traefik:
-    image: traefik # The official Traefik docker image
-    command: --api --docker --docker.watch --debug=true --docker.swarmmode=true
+    image: traefik
+    command:
+      - "--api"
+      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+      - "--entrypoints=Name:https Address::443 TLS"
+      - "--defaultentrypoints=http,https"
+      - "--acme"
+      - "--acme.storage=/opt/conf/acme.json"
+      - "--acme.entryPoint=https"
+      - "--acme.httpChallenge.entryPoint=http"
+      - "--acme.onHostRule=true"
+      - "--acme.onDemand=false"
+      - "--acme.email=infra@ubports.com"
+      - "--docker"
+      - "--docker.swarmMode"
+      - "--docker.watch"
+      - "--debug"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - conf-volume:/opt/conf
     networks:
       - webgateway
     ports:
       - 80:80
       - 443:443
-      - 889:8080
     deploy:
       mode: global
       placement:
@@ -22,8 +37,13 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
-       
+      labels:
+        traefik.docker.network: webgateway
+        traefik.frontend.rule: Host:proxy.infra.ubports.com
+        traefik.port: 8080
 networks:
   webgateway:
     driver: overlay
     external: true
+volumes:
+  conf-volume:
