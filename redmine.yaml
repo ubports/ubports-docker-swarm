@@ -11,9 +11,9 @@ services:
       - redmine-volume:/usr/src/redmine/files
     deploy:  
       labels:
-        - "traefik.docker.network: webgateway"
-        - "traefik.frontend.rule=Host:redmine2.ubports.com"
-        - "traefik.port=3000"
+        traefik.docker.network: webgateway
+        traefik.frontend.rule: Host:redmine2.ubports.com
+        traefik.port: 3000
     environment:
       REDMINE_DB_MYSQL: db     
       REDMINE_DB_PASSWORD_FILE: /run/secrets/redmine_db_password
@@ -27,17 +27,17 @@ services:
        replicas: 1
     volumes:
        - db-volume:/var/lib/mysql
-    environment:  
+    environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/redmine_db_password
       MYSQL_DATABASE: redmine
 
 networks:  
   db-net:
-  webgateway:    
+  webgateway:
     driver: overlay
     external: true 
 
-volumes:    
+volumes:
   db-volume:
   redmine-volume:
 

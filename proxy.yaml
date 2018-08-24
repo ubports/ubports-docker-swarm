@@ -5,7 +5,7 @@ services:
     image: traefik
     command:
       - "--api"
-      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+      - "--entrypoints=Name:http Address::80"
       - "--entrypoints=Name:https Address::443 TLS"
       - "--defaultentrypoints=http,https"
       - "--acme"

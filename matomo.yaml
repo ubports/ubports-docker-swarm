@@ -11,7 +11,7 @@ services:
       labels:
         traefik.docker.network: webgateway
         traefik.frontend.rule: Host:analytics2.ubports.com
-        traefik.port: 9000
+        traefik.port: 80
   db:
     image: mariadb
     networks:
@@ -23,7 +23,7 @@ services:
     secrets:
        - matomo_db_password
     environment:
-      MYSQL_ROOT_PASSWORD: /run/secrets/matomo_db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/matomo_db_password
       MYSQL_DATABASE: matomo
 
 networks:
