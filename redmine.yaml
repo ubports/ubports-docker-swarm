@@ -12,7 +12,7 @@ services:
     deploy:  
       labels:
         traefik.docker.network: webgateway
-        traefik.frontend.rule: Host:redmine2.ubports.com
+        traefik.frontend.rule: Host:redmine.ubports.com
         traefik.port: 3000
     environment:
       REDMINE_DB_MYSQL: db     
