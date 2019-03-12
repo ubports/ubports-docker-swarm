@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  do-float:
+    image: appointmentguru/digital-ocean-floating-ip
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+    environment:
+      DIGITALOCEAN_ACCESS_TOKEN: token
+      FLOATING_IP: ip
