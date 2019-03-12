@@ -1,0 +1,46 @@
+version: "3.4"
+services:
+  etherpad:
+    image: tvelocity/etherpad-lite
+    networks:
+      - webgateway
+      - db-net
+    secrets:
+      - etherpad_db_password 
+    deploy:  
+      labels:
+        traefik.docker.network: webgateway
+        traefik.frontend.rule: Host:pad.ubports.com
+        traefik.port: 9001
+    environment:
+      ETHERPAD_TITLE: UBports EtherPad
+      ETHERPAD_ADMIN_PASSWORD: 6lo2bakr5j2
+      ETHERPAD_DB_TYPE: mysql
+      ETHERPAD_DB_HOST: db  
+      ETHERPAD_DB_PASSWORD_FILE: /run/secrets/etherpad_db_password
+  db:
+    image: mariadb
+    secrets:
+      - etherpad_db_password
+    networks:
+      - db-net
+    deploy:
+       replicas: 1
+    volumes:
+       - db-vol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/etherpad_db_password
+      MYSQL_DATABASE: etherpad
+
+networks:  
+  db-net:
+  webgateway:
+    driver: overlay
+    external: true 
+
+volumes:
+  db-vol:
+
+secrets:
+   etherpad_db_password:
+     external: true
