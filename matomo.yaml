@@ -6,11 +6,11 @@ services:
       - webgateway
       - db-net
     volumes:
-      - conf-volume:/var/www/html/config
+      - conf-vol:/var/www/html/config
     deploy:
       labels:
         traefik.docker.network: webgateway
-        traefik.frontend.rule: Host:analytics2.ubports.com
+        traefik.frontend.rule: Host:analytics.ubports.com
         traefik.port: 80
   db:
     image: mariadb
@@ -19,7 +19,7 @@ services:
     deploy:
        replicas: 1
     volumes:
-       - db-volume:/var/lib/mysql
+       - db-vol:/var/lib/mysql
     secrets:
        - matomo_db_password
     environment:
@@ -33,8 +33,8 @@ networks:
     external: true
 
 volumes:
-  db-volume:
-  conf-volume:
+  db-vol:
+  conf-vol:
 
 secrets:
    matomo_db_password:
