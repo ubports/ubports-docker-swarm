@@ -14,7 +14,7 @@ services:
         traefik.port: 9001
     environment:
       ETHERPAD_TITLE: UBports EtherPad
-      ETHERPAD_ADMIN_PASSWORD: 6lo2bakr5j2
+      ETHERPAD_ADMIN_PASSWORD: pass
       ETHERPAD_DB_TYPE: mysql
       ETHERPAD_DB_HOST: db  
       ETHERPAD_DB_PASSWORD_FILE: /run/secrets/etherpad_db_password
